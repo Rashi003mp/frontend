@@ -1,0 +1,125 @@
+{
+  "users": [
+    {
+      "id": "e394",
+      "name": "rashid",
+      "email": "muhammedrashidr222@gmail.com",
+      "password": "101010"
+    },
+    {
+      "id": "21da",
+      "name": "rashid",
+      "email": "muhammedrashidr222@gmail.com",
+      "password": "101010"
+    },
+    {
+      "id": "07c0",
+      "email": "muhammedrashidr222@gmail.com",
+      "password": "101010"
+    },
+    {
+      "id": "0ed0",
+      "email": "muhammedrashidr222@gmail.com",
+      "password": "101010"
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Classic Fit Dress Shirt",
+      "price": 49.99,
+      "image": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=500&q=80",
+      "colors": [
+        "blue",
+        "white",
+        "gray"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Slim Fit Linen Dress Shirt",
+      "price": 59.99,
+      "image": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=500&q=80",
+      "colors": [
+        "beige",
+        "light blue",
+        "white"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Premium Cotton Dress Shirt",
+      "price": 69.99,
+      "image": "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=500&q=80",
+      "colors": [
+        "navy",
+        "black",
+        "white"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Casual Button-Down Dress Shirt",
+      "price": 44.99,
+      "image": "https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=500&q=80",
+      "colors": [
+        "red",
+        "blue",
+        "green"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Formal Twill Dress Shirt",
+      "price": 79.99,
+      "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=500&q=80",
+      "colors": [
+        "white",
+        "light pink"
+      ],
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Denim Dress Shirt",
+      "price": 54.99,
+      "image": "https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&h=500&q=80",
+      "colors": [
+        "light denim",
+        "dark denim"
+      ],
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ]
+    }
+  ]
+}
