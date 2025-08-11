@@ -5,14 +5,17 @@ import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import { WishlistProvider } from './context/WishlistContext.jsx';
+import { AdminRevenueProvider } from './pages/AdminPanal/Context/AdminContext.jsx';
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-       <WishlistProvider>
-          <App />
+        <WishlistProvider>
+          <AdminRevenueProvider>
+            <App />
+          </AdminRevenueProvider>
         </WishlistProvider>
       </AuthProvider>
     </BrowserRouter>

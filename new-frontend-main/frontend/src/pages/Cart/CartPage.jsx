@@ -22,32 +22,51 @@ export default function CartPage() {
     };
 
     // Remove item from cart
-    const handleRemove = async (productId) => {
-        try {
-            const updatedCart = cart.filter((item) => item.id !== productId);
+   const handleRemove = async (productId) => {
+  try {
+    // 1️⃣ Find the product in cart first (to get quantity for stock restore)
+    const removedItem = cart.find((item) => item.id === productId);
+    if (!removedItem) {
+      toast.error("Item not found in cart.");
+      return;
+    }
 
-            // Update server
-            await axios.patch(`http://localhost:3001/users/${user.id}`, {
-                cart: updatedCart,
-            });
+    // 2️⃣ Remove the product from the cart array
+    const updatedCart = cart.filter((item) => item.id !== productId);
 
-            // Update local state
-            setCart(updatedCart);
+    // 3️⃣ Update the user's cart in backend
+    await axios.patch(`http://localhost:3001/users/${user.id}`, {
+      cart: updatedCart,
+    });
 
-            // Update localStorage
-            const localUser = JSON.parse(localStorage.getItem('user')) || {};
-            localUser.cart = updatedCart;
-            localStorage.setItem('user', JSON.stringify(localUser));
+    // 4️⃣ Restore stock count in products list backend
+    const productRes = await axios.get(`http://localhost:3001/products/${productId}`);
+    const productData = productRes.data;
 
-            // Notify Navbar instantly
-            window.dispatchEvent(new Event('cartUpdated'));
+    const restoredCount = productData.count + removedItem.quantity;
 
-            toast.success("Item removed from cart");
-        } catch (error) {
-            console.error("Error removing item:", error);
-            toast.error("Failed to remove item");
-        }
-    };
+    await axios.patch(`http://localhost:3001/products/${productId}`, {
+      count: restoredCount,
+    });
+
+    // 5️⃣ Update cart state in frontend
+    setCart(updatedCart);
+
+    // 6️⃣ Update localStorage
+    const localUser = JSON.parse(localStorage.getItem("user")) || {};
+    localUser.cart = updatedCart;
+    localStorage.setItem("user", JSON.stringify(localUser));
+
+    // 7️⃣ Trigger cartUpdated event for navbar/cart icon
+    window.dispatchEvent(new Event("cartUpdated"));
+
+    // 8️⃣ Success toast
+    toast.success("Item removed from cart & stock restored");
+  } catch (error) {
+    console.error("Error removing item:", error);
+    toast.error("Failed to remove item");
+  }
+};
 
     // Update item quantity
     const updateQuantity = async (productId, newQuantity) => {

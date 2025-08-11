@@ -23,37 +23,67 @@ const OrderList = () => {
   }, [user]);
 
   const cancelOrder = async (orderId) => {
-  if (!window.confirm('Are you sure you want to cancel this order?')) return;
+    if (!window.confirm('Are you sure you want to cancel this order?')) return;
 
-  try {
-    setCancellingOrderId(orderId);
+    try {
+      setCancellingOrderId(orderId);
 
-    // Only remove the cancelled order
-    const updatedOrders = user.orders.filter(order => order.id !== orderId);
+      const cancelledOrder = user.orders.find(order => order.id === orderId);
+      if (!cancelledOrder) {
+        alert("Order not found");
+        setCancellingOrderId(null);
+        return;
+      }
 
-    // Keep cart safe by sending it along unchanged
-    const res = await fetch(`http://localhost:3001/users/${user.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        orders: updatedOrders,
-        cart: user.cart // <- keeps current cart intact
-      }),
-    });
+      // Restore stock counts
+      for (const item of cancelledOrder.cart) {
+        try {
+          const productRes = await fetch(`http://localhost:3001/products/${item.id}`);
+          const productData = await productRes.json();
+          const updatedCount = (productData.count || 0) + (item.quantity || 0);
+          await fetch(`http://localhost:3001/products/${item.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ count: updatedCount }),
+          });
+        } catch (err) {
+          console.error(`Failed to restore stock for product ${item.id}:`, err);
+        }
+      }
 
-    if (!res.ok) {
-      throw new Error('Failed to cancel order');
+      // Remove the order from user's orders
+      const updatedOrders = user.orders.filter(order => order.id !== orderId);
+
+      // Update backend
+      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orders: updatedOrders,
+          cart: user.cart,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to cancel order');
+      }
+
+      // Refresh user data in UI
+      await refreshUser();
+
+      // 🔄 Let AdminRevenueContext know orders changed
+      window.dispatchEvent(new Event('ordersUpdated'));
+
+      alert('Order cancelled successfully & stock restored.');
+    } catch (error) {
+      console.error('Cancel order error:', error);
+      alert('Could not cancel the order. Please try again.');
+    } finally {
+      setCancellingOrderId(null);
     }
+  };
 
-    await refreshUser();
-    alert('Order cancelled successfully.');
-  } catch (error) {
-    console.error('Cancel order error:', error);
-    alert('Could not cancel the order. Please try again.');
-  } finally {
-    setCancellingOrderId(null);
-  }
-};
+
 
   if (isLoading) {
     return (
@@ -139,10 +169,10 @@ const OrderList = () => {
                 </div>
                 <div className="flex items-center space-x-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'pending'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : order.status === 'paid'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : order.status === 'paid'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
                     }`}>
                     {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                   </span>
@@ -219,8 +249,8 @@ const OrderList = () => {
                       onClick={() => cancelOrder(order.id)}
                       disabled={cancellingOrderId === order.id}
                       className={`relative inline-flex items-center px-6 py-2 text-sm font-serif uppercase tracking-wider transition-transform duration-300 ease-out rounded-2xl shadow-lg transform ${cancellingOrderId === order.id
-                          ? 'bg-gray-900 text-yellow-300 opacity-70 cursor-not-allowed border border-yellow-800'
-                          : 'bg-black text-[#F5E9C8] hover:scale-[1.03] hover:shadow-2xl border-2 border-transparent hover:border-yellow-500'
+                        ? 'bg-gray-900 text-yellow-300 opacity-70 cursor-not-allowed border border-yellow-800'
+                        : 'bg-black text-[#F5E9C8] hover:scale-[1.03] hover:shadow-2xl border-2 border-transparent hover:border-yellow-500'
                         }`}
                     >
                       {cancellingOrderId === order.id ? 'Processing...' : 'Cancel Order'}

@@ -4,7 +4,6 @@ import Landing from './pages/landingpage/Landing';
 import Navbar from './components/Navbar';
 import Login from './context/Login';
 import Registration from './context/Registration';
-import Products from './pages/product/product';
 import WishlistPage from './pages/wishlist/WishlistPage';
 import { Toaster } from 'react-hot-toast';
 import './app.css';
@@ -16,11 +15,18 @@ import CategoryCards from './pages/landingpage/CategoriesCards';
 import CallPay from './pages/payment/CallPay';
 import OrderConfirmation from './pages/Orders/OrderConfirmation';
 import OrderList from './pages/Orders/OrderList';
+import Products from './pages/product/Product';
+import AdminDashboard from './pages/AdminPanal/pages/AdminDashboard';
+import ClientManagement from './pages/AdminPanal/pages/ClientManagement';
+import OrdersManagement from './pages/AdminPanal/pages/OrderManagement';
+import CollectionsManagement from './pages/AdminPanal/pages/CollectionManagement';
+// import AdminApp from './pages/AdminPanal/AdminApp';
+
 
 
 function App() {
    const location=useLocation();
-   const hideNav=['/order-list','/login','/order-confirmation','/registration',"/payment"]
+   const hideNav=['/admincollection','/adminorders','/adminclient','/admindashboard','/admin','/order-list','/login','/order-confirmation','/registration',"/payment"]
   return (
     <>
       {!hideNav.includes(location.pathname) && <Navbar /> }
@@ -40,6 +46,7 @@ function App() {
         }}
       />
       <Routes>
+        {/* user side */}
         <Route path='/' element={<Landing />} />
         <Route path='/login' element={<Login />} />
         <Route path='/registration' element={<Registration />} />
@@ -53,6 +60,13 @@ function App() {
         <Route path="/about" element={<CategoryCards/>} />
         <Route path="/order-confirmation" element={<OrderConfirmation/>} />
         <Route path="/order-list" element={<OrderList/>} />
+
+        {/* adminPanal */}
+        {/* <Route  path='/admin' element={<AdminApp />}/> */}
+        <Route path='/admindashboard' element ={<AdminDashboard/>}/>
+        <Route path='/adminclient' element ={<ClientManagement/>}/>
+        <Route path='/adminorders' element ={<OrdersManagement />}/>
+        <Route path='/admincollection' element ={<CollectionsManagement />}/>
 
       </Routes>
     </>
