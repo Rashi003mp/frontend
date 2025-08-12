@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { MagnifyingGlassIcon, ArrowPathIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, ArrowPathIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import AdminSidebar from "../components/AdminSidebar";
 import { useAuth } from "../../../context/AuthContext";
 import { useAdminRevenue } from "../Context/AdminContext";
@@ -21,11 +21,11 @@ export default function CollectionsManagement() {
     created_at: new Date().toISOString(),
   });
 
-  // ✅ Sidebar state
+  // Sidebar state
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
-  // ✅ Auth context
+  // Auth & Revenue
   const { isAdmin, user } = useAuth();
   const { todayOrdersCount } = useAdminRevenue();
 
@@ -85,14 +85,28 @@ export default function CollectionsManagement() {
     }
   };
 
+  // ✅ Delete product
+  const handleDeleteProduct = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+    if (!confirmDelete) return;
+
+    try {
+      await fetch(`http://localhost:3001/products/${id}`, {
+        method: "DELETE",
+      });
+      setProducts(products.filter((p) => p.id !== id)); // Update UI without refetch
+    } catch (err) {
+      console.error("Error deleting product", err);
+    }
+  };
+
   if (!isAdmin) {
     return <div className="flex items-center justify-center min-h-screen">Access Denied</div>;
   }
 
   return (
     <div className="flex min-h-screen bg-[#FAF9F6]">
-
-      {/* ✅ Sidebar */}
+      {/* Sidebar */}
       <AdminSidebar
         user={user}
         todayOrdersCount={todayOrdersCount}
@@ -165,40 +179,28 @@ export default function CollectionsManagement() {
         {showAddForm && (
           <div className="bg-white border border-[#E5D9C5] p-4 rounded mb-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-              <input
-                type="text" placeholder="Name"
-                className="border p-2 rounded"
+              <input type="text" placeholder="Name" className="border p-2 rounded"
                 value={newProduct.name}
                 onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
               />
-              <input
-                type="number" placeholder="Price"
-                className="border p-2 rounded"
+              <input type="number" placeholder="Price" className="border p-2 rounded"
                 value={newProduct.price}
                 onChange={(e) => setNewProduct({ ...newProduct, price: parseInt(e.target.value) })}
               />
-              <input
-                type="number" placeholder="Stock Count"
-                className="border p-2 rounded"
+              <input type="number" placeholder="Stock Count" className="border p-2 rounded"
                 value={newProduct.count}
                 onChange={(e) => setNewProduct({ ...newProduct, count: parseInt(e.target.value) })}
               />
-              <input
-                type="text" placeholder="Category"
-                className="border p-2 rounded"
+              <input type="text" placeholder="Category" className="border p-2 rounded"
                 value={newProduct.category}
                 onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
               />
-              <input
-                type="text" placeholder="Image URL"
-                className="border p-2 rounded md:col-span-2"
+              <input type="text" placeholder="Image URL" className="border p-2 rounded md:col-span-2"
                 value={newProduct.images[0]}
                 onChange={(e) => setNewProduct({ ...newProduct, images: [e.target.value] })}
               />
             </div>
-            <textarea
-              placeholder="Description"
-              className="border p-2 rounded w-full mb-3"
+            <textarea placeholder="Description" className="border p-2 rounded w-full mb-3"
               value={newProduct.description}
               onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
             />
@@ -227,6 +229,7 @@ export default function CollectionsManagement() {
                   <th className="px-4 py-2 text-left text-xs text-gray-600">Category</th>
                   <th className="px-4 py-2 text-left text-xs text-gray-600">Price</th>
                   <th className="px-4 py-2 text-left text-xs text-gray-600">Stock</th>
+                  <th className="px-4 py-2 text-left text-xs text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -239,6 +242,14 @@ export default function CollectionsManagement() {
                     <td className="px-4 py-2 text-sm">{p.category}</td>
                     <td className="px-4 py-2 text-sm">₹{p.price}</td>
                     <td className={`px-4 py-2 text-sm ${p.count < 5 ? "text-red-500" : ""}`}>{p.count}</td>
+                    <td className="px-4 py-2 text-sm">
+                      <button
+                        onClick={() => handleDeleteProduct(p.id)}
+                        className="flex items-center gap-1 text-red-600 hover:text-red-800"
+                      >
+                        <TrashIcon className="w-4 h-4" /> Delete
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
