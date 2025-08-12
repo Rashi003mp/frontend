@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // ✅ Use Link instead of <a>
+import { NavLink } from "react-router-dom"; // Changed from Link to NavLink
 import {
   ChartBarIcon,
   ShoppingCartIcon,
@@ -62,31 +62,49 @@ const AdminSidebar = ({
         <nav className="mt-6 flex-1">
           <div className="space-y-1 px-2">
             {/* Dashboard */}
-            <Link
+            <NavLink
               to="/admindashboard"
-              className={`flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} text-[#CC9966] bg-[#333333] border-l-4 border-[#CC9966] rounded-md`}
+              className={({ isActive }) => 
+                `flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} rounded-md transition-colors duration-200 ${
+                  isActive 
+                    ? 'text-[#CC9966] bg-[#333333] border-l-4 border-[#CC9966]' 
+                    : 'text-gray-300 hover:bg-[#333333] hover:text-[#CC9966]'
+                }`
+              }
             >
               <ChartBarIcon className="w-5 h-5 flex-shrink-0" />
               {!isSidebarCollapsed && (
                 <span className="ml-3 text-sm tracking-wider">Dashboard</span>
               )}
-            </Link>
+            </NavLink>
 
             {/* Collections */}
-            <Link
+            <NavLink
               to="/admincollection"
-              className={`flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} text-gray-300 hover:bg-[#333333] hover:text-[#CC9966] rounded-md transition-colors duration-200`}
+              className={({ isActive }) => 
+                `flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} rounded-md transition-colors duration-200 ${
+                  isActive 
+                    ? 'text-[#CC9966] bg-[#333333] border-l-4 border-[#CC9966]' 
+                    : 'text-gray-300 hover:bg-[#333333] hover:text-[#CC9966]'
+                }`
+              }
             >
               <RectangleStackIcon className="w-5 h-5 flex-shrink-0" />
               {!isSidebarCollapsed && (
                 <span className="ml-3 text-sm tracking-wider">Collections</span>
               )}
-            </Link>
+            </NavLink>
 
             {/* Orders */}
-            <Link
+            <NavLink
               to="/adminorders"
-              className={`relative flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} text-gray-300 hover:bg-[#333333] hover:text-[#CC9966] rounded-md transition-colors duration-200`}
+              className={({ isActive }) => 
+                `relative flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} rounded-md transition-colors duration-200 ${
+                  isActive 
+                    ? 'text-[#CC9966] bg-[#333333] border-l-4 border-[#CC9966]' 
+                    : 'text-gray-300 hover:bg-[#333333] hover:text-[#CC9966]'
+                }`
+              }
             >
               <ShoppingCartIcon className="w-5 h-5 flex-shrink-0" />
               {!isSidebarCollapsed && (
@@ -102,44 +120,25 @@ const AdminSidebar = ({
               {isSidebarCollapsed && todayOrdersCount > 0 && (
                 <span className="absolute top-2 right-2 w-2 h-2 bg-[#CC9966] rounded-full" />
               )}
-            </Link>
+            </NavLink>
 
             {/* Clients */}
-            <Link
+            <NavLink
               to='/adminclient'
-              className={`flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} text-gray-300 hover:bg-[#333333] hover:text-[#CC9966] rounded-md transition-colors duration-200`}
+              className={({ isActive }) => 
+                `flex items-center ${isSidebarCollapsed ? 'justify-center py-3 mx-2' : 'px-4 py-3'} rounded-md transition-colors duration-200 ${
+                  isActive 
+                    ? 'text-[#CC9966] bg-[#333333] border-l-4 border-[#CC9966]' 
+                    : 'text-gray-300 hover:bg-[#333333] hover:text-[#CC9966]'
+                }`
+              }
             >
               <UserGroupIcon className="w-5 h-5 flex-shrink-0" />
               {!isSidebarCollapsed && (
                 <span className="ml-3 text-sm tracking-wider">Clients</span>
               )}
-            </Link>
+            </NavLink>
           </div>
-
-          {/* Management section */}
-          {!isSidebarCollapsed && (
-            <div className="mt-8">
-              <div className="px-4 mb-2">
-                <p className="text-xs text-gray-500 uppercase tracking-wider">Management</p>
-              </div>
-              <div className="space-y-1 px-2">
-                <Link
-                  to="/admin/analytics"
-                  className="flex items-center px-4 py-3 text-gray-300 hover:bg-[#333333] hover:text-[#CC9966] rounded-md transition-colors duration-200"
-                >
-                  <ChartBarIcon className="w-5 h-5 flex-shrink-0" />
-                  <span className="ml-3 text-sm tracking-wider">Analytics</span>
-                </Link>
-                <Link
-                  to="/admin/settings"
-                  className="flex items-center px-4 py-3 text-gray-300 hover:bg-[#333333] hover:text-[#CC9966] rounded-md transition-colors duration-200"
-                >
-                  <Cog6ToothIcon className="w-5 h-5 flex-shrink-0" />
-                  <span className="ml-3 text-sm tracking-wider">Settings</span>
-                </Link>
-              </div>
-            </div>
-          )}
         </nav>
 
         {/* Collapse toggle moved to bottom */}

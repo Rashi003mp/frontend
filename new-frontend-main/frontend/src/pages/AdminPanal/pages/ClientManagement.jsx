@@ -30,18 +30,22 @@ export default function ClientManagement() {
   const { todayOrdersCount } = useAdminRevenue();
 
   // Fetch all users
+    // Fetch all users
   const fetchClients = async () => {
     try {
       setLoading(true);
       const res = await fetch("http://localhost:3001/users");
       const data = await res.json();
-      setClients(data);
+      // ✅ Only keep non-admin users
+      const onlyUsers = data.filter(client => client.role === "user");
+      setClients(onlyUsers);
     } catch (error) {
       console.error("Error fetching clients:", error);
     } finally {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchClients();

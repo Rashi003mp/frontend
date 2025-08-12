@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
+
 const Login = () => {
   const navigate = useNavigate();
-  const { login,user } = useAuth();
+  const { login } = useAuth();
+
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -15,17 +17,9 @@ const Login = () => {
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
   });
-useEffect(()=>{
-if(user && user.role ==="user" ){
-  navigate("/")
-}
-},[])
-  
+
   const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
+    initialValues: { email: "", password: "" },
     validationSchema,
     onSubmit: async (values, { setSubmitting, setStatus, resetForm }) => {
       const result = await login(values.email, values.password);
@@ -33,7 +27,13 @@ if(user && user.role ==="user" ){
       if (result.success) {
         setStatus({ success: "Login successful!" });
         resetForm();
-        navigate('/');
+
+        // ✅ Redirect based on role
+        if (result.user.role === "admin") {
+          navigate("/admindashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         setStatus({ error: result.error });
       }
@@ -44,12 +44,13 @@ if(user && user.role ==="user" ){
   return (
     <div className="max-w-md mx-auto my-10 bg-white p-8 rounded-lg shadow-sm border border-gray-100">
       <h2 className="text-3xl font-bold mb-8 text-center">My Account</h2>
-      
       <div className="mb-6 text-center">
         <p className="text-gray-600">I already have an account</p>
       </div>
-      
+
       <form onSubmit={formik.handleSubmit} className="space-y-4">
+        
+        {/* Email */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
             Login*
@@ -69,6 +70,7 @@ if(user && user.role ==="user" ){
           )}
         </div>
 
+        {/* Password */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
             Password*
@@ -88,13 +90,15 @@ if(user && user.role ==="user" ){
           )}
         </div>
 
-        {formik.status && formik.status.success && (
+        {/* Status messages */}
+        {formik.status?.success && (
           <div className="text-green-600 text-sm">{formik.status.success}</div>
         )}
-        {formik.status && formik.status.error && (
+        {formik.status?.error && (
           <div className="text-red-600 text-sm">{formik.status.error}</div>
         )}
 
+        {/* Submit */}
         <button
           type="submit"
           className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -104,11 +108,12 @@ if(user && user.role ==="user" ){
         </button>
       </form>
 
+      {/* Register link */}
       <div className="mt-8 text-center">
         <p className="text-gray-600">
           New to our store?{" "}
-          <button 
-            onClick={() => navigate('/registration')} 
+          <button
+            onClick={() => navigate("/registration")}
             className="text-black font-medium hover:underline focus:outline-none"
           >
             Register here

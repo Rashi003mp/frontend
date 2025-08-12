@@ -16,10 +16,25 @@
       "password": "123456A@",
       "role": "user",
       "isBlock": false,
-      "cart": [],
+      "cart": [
+        {
+          "id": "2",
+          "name": "Relaxed Jeans",
+          "description": "Stylish relaxed fit jeans for everyday wear.",
+          "price": 1899,
+          "count": 17,
+          "category": "Jeans",
+          "images": [
+            "https://image.hm.com/assets/hm/e4/52/e452b3de0f30f151ad20a50c464daec399d7eb19.jpg?imwidth=396"
+          ],
+          "isActive": true,
+          "created_at": "2025-08-05T00:00:00Z",
+          "quantity": 10
+        }
+      ],
       "orders": [
         {
-          "id": "order_1754894688937",
+          "id": "order_1754989129068",
           "userId": "2b63",
           "contact": {
             "email": "muhammedrashidr222@gmail.com",
@@ -39,6 +54,20 @@
             "sameAsShipping": true
           },
           "cart": [
+            {
+              "id": "1",
+              "name": "Loose Straight Jeans",
+              "description": "Comfortable loose fit jeans perfect for casual wear.",
+              "price": 1999,
+              "count": 14,
+              "category": "Jeans",
+              "images": [
+                "https://image.hm.com/assets/hm/a4/4e/a44eab31a3a8ad06dcdf1ca3c905696b57a78968.jpg?imwidth=1260"
+              ],
+              "isActive": true,
+              "created_at": "2025-08-05T00:00:00Z",
+              "quantity": 1
+            },
             {
               "id": "2",
               "name": "Relaxed Jeans",
@@ -55,91 +84,9 @@
             }
           ],
           "paymentMethod": "cod",
-          "totalAmount": 2094,
-          "status": "cancelled",
-          "placed_at": "2025-08-11T06:44:48.937Z"
-        },
-        {
-          "id": "order_1754901234211",
-          "userId": "2b63",
-          "contact": {
-            "email": "muhammedrashidr222@gmail.com",
-            "news": true
-          },
-          "shipping": {
-            "country": "India",
-            "firstName": "rashid",
-            "lastName": "mp",
-            "address": "Mavandiyour peediyekkal",
-            "city": "Valanchery",
-            "state": "Select State",
-            "pincode": "676553",
-            "phone": "07510 737877"
-          },
-          "billing": {
-            "sameAsShipping": true
-          },
-          "cart": [
-            {
-              "id": "9",
-              "name": "Embroidered-motif Cotton Cap",
-              "description": "A stylish cotton cap with an embroidered motif. Perfect for casual wear and sun protection.",
-              "price": 799,
-              "count": 24,
-              "category": "Accessories",
-              "images": [
-                "https://image.hm.com/assets/hm/56/37/5637fae1306d48917f9b106331651247be5d7c06.jpg?imwidth=384"
-              ],
-              "isActive": true,
-              "created_at": "2025-08-06T00:00:00Z",
-              "quantity": 1
-            }
-          ],
-          "paymentMethod": "cod",
-          "totalAmount": 939,
-          "status": "cancelled",
-          "placed_at": "2025-08-11T08:33:54.211Z"
-        },
-        {
-          "id": "order_1754901244467",
-          "userId": "2b63",
-          "contact": {
-            "email": "muhammedrashidr222@gmail.com",
-            "news": true
-          },
-          "shipping": {
-            "country": "India",
-            "firstName": "rashid",
-            "lastName": "mp",
-            "address": "Mavandiyour peediyekkal",
-            "city": "Valanchery",
-            "state": "Select State",
-            "pincode": "676553",
-            "phone": "07510 737877"
-          },
-          "billing": {
-            "sameAsShipping": true
-          },
-          "cart": [
-            {
-              "id": "22",
-              "name": "Louis Vuitton Cuffed Denim Skate Pants",
-              "description": "Streetwear-inspired cuffed denim skate pants by Louis Vuitton. Relaxed fit with premium detailing for a modern urban look.",
-              "price": 94000,
-              "count": 6,
-              "category": "Jeans",
-              "images": [
-                "https://in.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-cuffed-denim-skate-pants--HTD07WVON650_PM2_Front%20view.png?wid=490&hei=490"
-              ],
-              "isActive": true,
-              "created_at": "2025-08-08T00:00:00Z",
-              "quantity": 1
-            }
-          ],
-          "paymentMethod": "cod",
-          "totalAmount": 98800,
-          "status": "cancelled",
-          "placed_at": "2025-08-11T08:34:04.467Z"
+          "totalAmount": 4193,
+          "status": "delivered",
+          "placed_at": "2025-08-12T08:58:49.068Z"
         }
       ],
       "wishlist": [],
@@ -152,7 +99,7 @@
       "name": "Loose Straight Jeans",
       "description": "Comfortable loose fit jeans perfect for casual wear.",
       "price": 1999,
-      "count": 14,
+      "count": 13,
       "category": "Jeans",
       "images": [
         "https://image.hm.com/assets/hm/a4/4e/a44eab31a3a8ad06dcdf1ca3c905696b57a78968.jpg?imwidth=1260"
@@ -165,7 +112,7 @@
       "name": "Relaxed Jeans",
       "description": "Stylish relaxed fit jeans for everyday wear.",
       "price": 1899,
-      "count": 17,
+      "count": 16,
       "category": "Jeans",
       "images": [
         "https://image.hm.com/assets/hm/e4/52/e452b3de0f30f151ad20a50c464daec399d7eb19.jpg?imwidth=396"
@@ -256,7 +203,7 @@
       "name": "Embroidered-motif Cotton Cap",
       "description": "A stylish cotton cap with an embroidered motif. Perfect for casual wear and sun protection.",
       "price": 799,
-      "count": 23,
+      "count": 24,
       "category": "Accessories",
       "images": [
         "https://image.hm.com/assets/hm/56/37/5637fae1306d48917f9b106331651247be5d7c06.jpg?imwidth=384"
@@ -425,7 +372,7 @@
       "name": "Louis Vuitton Cuffed Denim Skate Pants",
       "description": "Streetwear-inspired cuffed denim skate pants by Louis Vuitton. Relaxed fit with premium detailing for a modern urban look.",
       "price": 94000,
-      "count": 5,
+      "count": 6,
       "category": "Jeans",
       "images": [
         "https://in.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-cuffed-denim-skate-pants--HTD07WVON650_PM2_Front%20view.png?wid=490&hei=490"

@@ -136,8 +136,7 @@ const Navbar = () => {
                             >
                                 <ShoppingBagIcon className="h-5 w-5" aria-hidden="true" />
                                 {cartItemsCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-grey-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                        {cartItemsCount}
+                                    <span className="absolute -top-1 -right-1 text-red-500 text-xs font-bold">                                        {cartItemsCount}
                                     </span>
                                 )}
                             </button>
