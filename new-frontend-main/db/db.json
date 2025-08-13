@@ -7,7 +7,22 @@
       "password": "Admin@123",
       "role": "admin",
       "isBlock": false,
-      "created_at": "2025-08-11T12:00:00Z"
+      "created_at": "2025-08-11T12:00:00Z",
+      "wishlist": [
+        {
+          "id": "1",
+          "name": "Loose Straight Jeans",
+          "description": "Comfortable loose fit jeans perfect for casual wear.",
+          "price": 1999,
+          "count": 13,
+          "category": "Jeans",
+          "images": [
+            "https://image.hm.com/assets/hm/a4/4e/a44eab31a3a8ad06dcdf1ca3c905696b57a78968.jpg?imwidth=1260"
+          ],
+          "isActive": true,
+          "created_at": "2025-08-05T00:00:00Z"
+        }
+      ]
     },
     {
       "id": "2b63",
@@ -91,6 +106,128 @@
       ],
       "wishlist": [],
       "created_at": "2025-08-09T18:01:38.034Z"
+    },
+    {
+      "id": "1129",
+      "name": "ansif",
+      "email": "ansif@gmail.com",
+      "password": "123456A@",
+      "role": "user",
+      "isBlock": false,
+      "cart": [
+        {
+          "id": "26",
+          "name": "Louis Vuitton Denim Carpenter Pants",
+          "description": "Utility-inspired denim carpenter pants by Louis Vuitton with functional pockets and a high-fashion finish.",
+          "price": 92000,
+          "count": 6,
+          "category": "Jeans",
+          "images": [
+            "https://in.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-denim-carpenter-pants--HSD20EPQF650_PM2_Front%20view.png?wid=490&hei=490"
+          ],
+          "isActive": true,
+          "created_at": "2025-08-08T00:00:00Z",
+          "quantity": 1
+        }
+      ],
+      "orders": [
+        {
+          "id": "order_1754998048758",
+          "userId": "1129",
+          "contact": {
+            "email": "ansif@gmail.com",
+            "news": true
+          },
+          "shipping": {
+            "country": "India",
+            "firstName": "ansif",
+            "lastName": "asnsi",
+            "address": "mangat kavungal",
+            "city": "pttn",
+            "state": "Kerala",
+            "pincode": "676552",
+            "phone": "9048126169"
+          },
+          "billing": {
+            "sameAsShipping": true
+          },
+          "cart": [
+            {
+              "id": "1754912943392",
+              "name": "new ",
+              "description": "glass makes look better",
+              "price": 10000,
+              "count": 10,
+              "category": "accessories",
+              "images": [
+                "https://image.hm.com/assets/hm/f8/a8/f8a8dc0b469d20cec888205b086cb2a86de6f8aa.jpg?imwidth=396"
+              ],
+              "isActive": true,
+              "created_at": "2025-08-11T11:45:03.136Z",
+              "quantity": 2
+            }
+          ],
+          "paymentMethod": "cod",
+          "totalAmount": 21100,
+          "status": "delivered",
+          "placed_at": "2025-08-12T11:27:28.758Z"
+        },
+        {
+          "id": "order_1755057541772",
+          "userId": "1129",
+          "contact": {
+            "email": "ansif@gmail.com",
+            "news": true
+          },
+          "shipping": {
+            "country": "India",
+            "firstName": "ansif",
+            "lastName": "asnsi",
+            "address": "mangat kavungal",
+            "city": "pttn",
+            "state": "Kerala",
+            "pincode": "676552",
+            "phone": "9048126169"
+          },
+          "billing": {
+            "sameAsShipping": true
+          },
+          "cart": [
+            {
+              "id": "2",
+              "name": "Relaxed Jeans",
+              "description": "Stylish relaxed fit jeans for everyday wear.",
+              "price": 1899,
+              "count": 16,
+              "category": "Jeans",
+              "images": [
+                "https://image.hm.com/assets/hm/e4/52/e452b3de0f30f151ad20a50c464daec399d7eb19.jpg?imwidth=396"
+              ],
+              "isActive": true,
+              "created_at": "2025-08-05T00:00:00Z",
+              "quantity": 1
+            }
+          ],
+          "paymentMethod": "cod",
+          "totalAmount": 2094,
+          "status": "pending",
+          "placed_at": "2025-08-13T03:59:01.772Z"
+        }
+      ],
+      "wishlist": [],
+      "created_at": "2025-08-12T11:23:26.543Z"
+    },
+    {
+      "id": "bad0",
+      "name": "aflah",
+      "email": "aflah@gmail.com",
+      "password": "Aflah@123",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": [],
+      "created_at": "2025-08-12T11:30:31.688Z"
     }
   ],
   "products": [
@@ -99,7 +236,7 @@
       "name": "Loose Straight Jeans",
       "description": "Comfortable loose fit jeans perfect for casual wear.",
       "price": 1999,
-      "count": 13,
+      "count": 20,
       "category": "Jeans",
       "images": [
         "https://image.hm.com/assets/hm/a4/4e/a44eab31a3a8ad06dcdf1ca3c905696b57a78968.jpg?imwidth=1260"
@@ -112,7 +249,7 @@
       "name": "Relaxed Jeans",
       "description": "Stylish relaxed fit jeans for everyday wear.",
       "price": 1899,
-      "count": 16,
+      "count": 15,
       "category": "Jeans",
       "images": [
         "https://image.hm.com/assets/hm/e4/52/e452b3de0f30f151ad20a50c464daec399d7eb19.jpg?imwidth=396"
@@ -424,7 +561,7 @@
       "name": "Louis Vuitton Denim Carpenter Pants",
       "description": "Utility-inspired denim carpenter pants by Louis Vuitton with functional pockets and a high-fashion finish.",
       "price": 92000,
-      "count": 6,
+      "count": 5,
       "category": "Jeans",
       "images": [
         "https://in.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-denim-carpenter-pants--HSD20EPQF650_PM2_Front%20view.png?wid=490&hei=490"
@@ -450,8 +587,8 @@
       "name": "new ",
       "description": "glass makes look better",
       "price": 10000,
-      "count": 10,
-      "category": "accessories",
+      "count": 8,
+      "category": "Accessories",
       "images": [
         "https://image.hm.com/assets/hm/f8/a8/f8a8dc0b469d20cec888205b086cb2a86de6f8aa.jpg?imwidth=396"
       ],

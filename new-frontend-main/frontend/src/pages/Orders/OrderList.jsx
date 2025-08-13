@@ -14,7 +14,7 @@ const OrderList = () => {
         await refreshUser();
       })();
     }
-  }, [isAuthenticated, refreshUser]);
+  }, [isAuthenticated]); // Note: refreshUser removed from deps to avoid potential loops
 
   useEffect(() => {
     if (user?.orders) {
@@ -35,7 +35,7 @@ const OrderList = () => {
         return;
       }
 
-      // Restore stock counts
+      // Restore stock counts for each item in the cancelled order
       for (const item of cancelledOrder.cart) {
         try {
           const productRes = await fetch(`http://localhost:3001/products/${item.id}`);
@@ -51,30 +51,29 @@ const OrderList = () => {
         }
       }
 
-      // Remove the order from user's orders
+      // Create a new orders array without the cancelled one
       const updatedOrders = user.orders.filter(order => order.id !== orderId);
 
-      // Update backend
+      // Update the user object on the backend
       const res = await fetch(`http://localhost:3001/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orders: updatedOrders,
-          cart: user.cart,
         }),
       });
 
       if (!res.ok) {
-        throw new Error('Failed to cancel order');
+        throw new Error('Failed to update user data on the server');
       }
 
-      // Refresh user data in UI
+      // Refresh user data in the UI to reflect the change
       await refreshUser();
-
-      // 🔄 Let AdminRevenueContext know orders changed
+      
+      // Notify other components (like admin panel) that orders have changed
       window.dispatchEvent(new Event('ordersUpdated'));
 
-      alert('Order cancelled successfully & stock restored.');
+      alert('Order cancelled successfully and stock has been restored.');
     } catch (error) {
       console.error('Cancel order error:', error);
       alert('Could not cancel the order. Please try again.');
@@ -82,8 +81,6 @@ const OrderList = () => {
       setCancellingOrderId(null);
     }
   };
-
-
 
   if (isLoading) {
     return (
@@ -158,22 +155,21 @@ const OrderList = () => {
             <div key={order.id} className="border border-brown-200 bg-white shadow-sm overflow-hidden">
               <div className="bg-brown-900 text-cream-50 px-6 py-4 flex flex-wrap justify-between items-center">
                 <div className="mb-2 sm:mb-0">
-                  <h3 className="font-serif text-lg tracking-wider">ORDER {order.id}</h3>
+                  <h3 className="font-serif text-lg tracking-wider">ORDER #{order.id}</h3>
                   <p className="text-cream-200 text-sm">
                     {new Date(order.placed_at).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
+                      year: 'numeric', month: 'long', day: 'numeric',
                     })}
                   </p>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'pending'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : order.status === 'paid'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                    }`}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                    order.status === 'paid' ? 'bg-blue-100 text-blue-800' :
+                    order.status === 'shipped' ? 'bg-purple-100 text-purple-800' :
+                    order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
                     {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                   </span>
                   <span className="text-lg font-serif">₹{order.totalAmount.toLocaleString()}</span>
@@ -181,8 +177,8 @@ const OrderList = () => {
               </div>
 
               <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Shipping Info */}
                 <div className="lg:col-span-1 space-y-6">
+                  {/* Shipping Address */}
                   <div>
                     <h4 className="font-serif text-brown-900 uppercase tracking-wider text-sm mb-3">SHIPPING ADDRESS</h4>
                     <address className="not-italic text-brown-700">
@@ -193,7 +189,7 @@ const OrderList = () => {
                       <p className="mt-2">Phone: {order.shipping.phone}</p>
                     </address>
                   </div>
-
+                  {/* Billing Address */}
                   <div>
                     <h4 className="font-serif text-brown-900 uppercase tracking-wider text-sm mb-3">BILLING ADDRESS</h4>
                     {order.billing.sameAsShipping ? (
@@ -208,17 +204,16 @@ const OrderList = () => {
                       </address>
                     )}
                   </div>
-
+                  {/* Contact & Payment */}
                   <div>
                     <h4 className="font-serif text-brown-900 uppercase tracking-wider text-sm mb-3">CONTACT & PAYMENT</h4>
                     <p className="text-brown-700 mb-2">{order.contact.email}</p>
                     <p className="text-brown-700">
-                      {order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Paid with Credit/Debit Card'}
+                      {order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Paid with Card'}
                     </p>
                   </div>
                 </div>
 
-                {/* Items */}
                 <div className="lg:col-span-2">
                   <h4 className="font-serif text-brown-900 uppercase tracking-wider text-sm mb-4">ITEMS</h4>
                   <div className="divide-y divide-brown-100">
@@ -243,19 +238,21 @@ const OrderList = () => {
                     ))}
                   </div>
 
-                  {/* Cancel Button */}
-                  <div className="mt-6 flex justify-end">
-                    <button
-                      onClick={() => cancelOrder(order.id)}
-                      disabled={cancellingOrderId === order.id}
-                      className={`relative inline-flex items-center px-6 py-2 text-sm font-serif uppercase tracking-wider transition-transform duration-300 ease-out rounded-2xl shadow-lg transform ${cancellingOrderId === order.id
-                        ? 'bg-gray-900 text-yellow-300 opacity-70 cursor-not-allowed border border-yellow-800'
-                        : 'bg-black text-[#F5E9C8] hover:scale-[1.03] hover:shadow-2xl border-2 border-transparent hover:border-yellow-500'
+                  {/* ✅ Conditional Cancel Button */}
+                  {(order.status === 'pending' || order.status === 'paid') && (
+                    <div className="mt-6 flex justify-end">
+                      <button
+                        onClick={() => cancelOrder(order.id)}
+                        disabled={cancellingOrderId === order.id}
+                        className={`relative inline-flex items-center px-6 py-2 text-sm font-serif uppercase tracking-wider transition-transform duration-300 ease-out rounded-2xl shadow-lg transform ${cancellingOrderId === order.id
+                          ? 'bg-gray-900 text-yellow-300 opacity-70 cursor-not-allowed border border-yellow-800'
+                          : 'bg-black text-[#F5E9C8] hover:scale-[1.03] hover:shadow-2xl border-2 border-transparent hover:border-yellow-500'
                         }`}
-                    >
-                      {cancellingOrderId === order.id ? 'Processing...' : 'Cancel Order'}
-                    </button>
-                  </div>
+                      >
+                        {cancellingOrderId === order.id ? 'Processing...' : 'Cancel Order'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

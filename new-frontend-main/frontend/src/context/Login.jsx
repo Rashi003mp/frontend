@@ -4,10 +4,9 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
-
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, logout } = useAuth(); // Get logout to clear state for blocked users
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -23,18 +22,29 @@ const Login = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting, setStatus, resetForm }) => {
       const result = await login(values.email, values.password);
+console.log(result);
 
       if (result.success) {
-        setStatus({ success: "Login successful!" });
-        resetForm();
-
-        // ✅ Redirect based on role
-        if (result.user.role === "admin") {
-          navigate("/admindashboard");
+        // --- CHECK IF USER IS BLOCKED ---
+        if (result.user.isBlock) {
+         
+          setStatus({ error: "You are blocked. Please contact support." });
+          logout(); // Ensure any partial login state is fully cleared
+          resetForm(); // Clear the form fields
         } else {
-          navigate("/");
+          // If user is not blocked, proceed with normal login
+          setStatus({ success: "Login successful!" });
+          resetForm();
+
+          // Redirect based on role
+          if (result.user.role === "admin") {
+            navigate("/admindashboard");
+          } else {
+            navigate("/");
+          }
         }
       } else {
+        // Handle incorrect credentials
         setStatus({ error: result.error });
       }
       setSubmitting(false);
@@ -50,7 +60,7 @@ const Login = () => {
 
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         
-        {/* Email */}
+        {/* Email Input */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
             Login*
@@ -70,7 +80,7 @@ const Login = () => {
           )}
         </div>
 
-        {/* Password */}
+        {/* Password Input */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
             Password*
@@ -90,7 +100,7 @@ const Login = () => {
           )}
         </div>
 
-        {/* Status messages */}
+        {/* Status Messages (Success/Error) */}
         {formik.status?.success && (
           <div className="text-green-600 text-sm">{formik.status.success}</div>
         )}
@@ -98,7 +108,7 @@ const Login = () => {
           <div className="text-red-600 text-sm">{formik.status.error}</div>
         )}
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -108,7 +118,7 @@ const Login = () => {
         </button>
       </form>
 
-      {/* Register link */}
+      {/* Link to Registration */}
       <div className="mt-8 text-center">
         <p className="text-gray-600">
           New to our store?{" "}

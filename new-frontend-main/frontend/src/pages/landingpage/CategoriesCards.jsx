@@ -7,8 +7,8 @@ const CategoryCards = () => {
   const navigate = useNavigate();
 
   const categories = [
-    { key: "Jeans", label: "Pants" },
-    { key: "Shirts", label: "Shirts" },
+    { key: "Jeans", label: "Men's Pants" },
+    { key: "Shirts", label: "Men's Shirts" },
     { key: "Accessories", label: "Accessories" },
   ];
 

@@ -26,7 +26,7 @@ export default function ClientManagement() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   // ✅ Logged in admin info + order count for badge
-  const { isAdmin, user } = useAuth();
+  const { isAdmin, user,logout } = useAuth();
   const { todayOrdersCount } = useAdminRevenue();
 
   // Fetch all users
@@ -106,6 +106,7 @@ export default function ClientManagement() {
       {/* ✅ Sidebar */}
       <AdminSidebar
         user={user}
+        logout={logout}
         todayOrdersCount={todayOrdersCount}
         isSidebarCollapsed={isSidebarCollapsed}
         toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
