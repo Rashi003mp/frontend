@@ -1,9 +1,9 @@
 import React, { Suspense, lazy } from "react";
-import {  Routes, Route, useLocation } from "react-router-dom"; // Keep BrowserRouter
-
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import RoleBasedRoute from "./RoleBasedRoute";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // ✅ Lazy-loaded imports
 const Login = lazy(() => import("./context/Login"));
@@ -24,18 +24,18 @@ const OrdersManagement = lazy(() => import("./pages/AdminPanal/pages/OrderManage
 const CollectionsManagement = lazy(() => import("./pages/AdminPanal/pages/CollectionManagement"));
 const NotFound = lazy(() => import("./NotFount"));
 
-function App() { // Renamed App to AppContent
+function App() {
   const location = useLocation();
   const hideNav = [
-    '/admincollection',
-    '/adminorders',
-    '/adminclient',
-    '/admindashboard',
-    '/admin', // Assuming this is an admin entry point, might be covered by /admindashboard
-    '/order-list',
-    '/login',
-    '/order-confirmation',
-    '/registration',
+    "/admincollection",
+    "/adminorders",
+    "/adminclient",
+    "/admindashboard",
+    "/admin",
+    "/order-list",
+    "/login",
+    "/order-confirmation",
+    "/registration",
     "/payment"
   ];
 
@@ -51,23 +51,21 @@ function App() { // Renamed App to AppContent
         }
       >
         <Routes>
-          {/* Public Routes - accessible to everyone, no auth required */}
-          {/* If a logged-in user tries to access login/register, they are redirected by RoleBasedRoute */}
+          {/* Public Routes */}
           <Route path="/" element={<Landing />} />
           <Route path="/about" element={<AboutPage />} />
-          
-          {/* Publicly accessible product routes (can be viewed by guests and logged-in users) */}
+
+          {/* Public product routes */}
           <Route path="/products" element={<Products />} />
           <Route path="/productdetails/:id" element={<ProductDetails />} />
 
-          {/* Guest-only routes: Only accessible if NOT logged in. If logged in, redirects. */}
+          {/* Guest-only routes */}
           <Route element={<RoleBasedRoute allowedRoles={['guest']} />}>
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
           </Route>
 
-          {/* User-only routes: Only accessible if logged in as 'user'. */}
-          {/* If a user is 'admin', they will be redirected away from these routes by RoleBasedRoute's internal logic. */}
+          {/* User-only routes */}
           <Route element={<RoleBasedRoute allowedRoles={['user']} />}>
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/profile" element={<Profile />} />
@@ -77,8 +75,7 @@ function App() { // Renamed App to AppContent
             <Route path="/order-list" element={<OrderList />} />
           </Route>
 
-          {/* Admin-only routes: Only accessible if logged in as 'admin'. */}
-          {/* If a user is 'user', they will be redirected away from these routes by RoleBasedRoute's internal logic. */}
+          {/* Admin-only routes */}
           <Route element={<RoleBasedRoute allowedRoles={['admin']} />}>
             <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/adminclient" element={<ClientManagement />} />
@@ -90,6 +87,17 @@ function App() { // Renamed App to AppContent
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+
+      {/* ✅ ToastContainer for global toasts */}
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+      />
     </>
   );
 }

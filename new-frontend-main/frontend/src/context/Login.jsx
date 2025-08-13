@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,12 +29,14 @@ console.log(result);
         // --- CHECK IF USER IS BLOCKED ---
         if (result.user.isBlock) {
          
-          setStatus({ error: "You are blocked. Please contact support." });
+          toast.error("blocked")
+          // setStatus({ error: "You are blocked. Please contact support." });
           logout(); // Ensure any partial login state is fully cleared
           resetForm(); // Clear the form fields
         } else {
           // If user is not blocked, proceed with normal login
           setStatus({ success: "Login successful!" });
+          toast.success("login success")
           resetForm();
 
           // Redirect based on role

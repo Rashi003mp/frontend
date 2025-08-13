@@ -154,6 +154,7 @@ const PaymentForm = ({ currentUser, cart, clearCart }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
+      <h1 onClick={()=> navigate(-2)}>🔙</h1>
       <h2 className="text-2xl font-bold mb-6">Complete Your Purchase</h2>
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-1 bg-gray-50 p-6 rounded-lg">
