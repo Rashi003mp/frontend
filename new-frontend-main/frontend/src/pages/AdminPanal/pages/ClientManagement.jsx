@@ -14,6 +14,7 @@ import {
 import AdminSidebar from "../components/AdminSidebar"; 
 import { useAuth } from "../../../context/AuthContext";
 import { useAdminRevenue } from "../Context/AdminContext";
+import { URL } from "../../api";
 
 export default function ClientManagement() {
   const [clients, setClients] = useState([]);
@@ -34,7 +35,7 @@ export default function ClientManagement() {
   const fetchClients = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:3001/users");
+      const res = await fetch(`${URL}/users`);
       const data = await res.json();
       // ✅ Only keep non-admin users
       const onlyUsers = data.filter(client => client.role === "user");
@@ -54,7 +55,7 @@ export default function ClientManagement() {
   // Block / Unblock Toggle
   const toggleBlockStatus = async (id, currentStatus) => {
     try {
-      await fetch(`http://localhost:3001/users/${id}`, {
+      await fetch(`${URL}/users/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isBlock: !currentStatus }),

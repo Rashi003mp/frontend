@@ -3,6 +3,7 @@ import { MagnifyingGlassIcon, ArrowPathIcon, PlusIcon, TrashIcon, PencilSquareIc
 import AdminSidebar from "../components/AdminSidebar";
 import { useAuth } from "../../../context/AuthContext";
 import { useAdminRevenue } from "../Context/AdminContext";
+import { URL } from "../../api";
 
 // Define the initial state for the form outside the component for reusability
 const initialFormState = {
@@ -40,7 +41,7 @@ export default function CollectionsManagement() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:3001/products");
+      const res = await fetch(`${URL}/products`);
       const data = await res.json();
       setProducts(data);
     } catch (err) {
@@ -83,8 +84,8 @@ export default function CollectionsManagement() {
     e.preventDefault();
 
     const url = editingProduct
-      ? `http://localhost:3001/products/${editingProduct.id}` // URL for updating
-      : "http://localhost:3001/products"; // URL for creating
+      ? `${URL}/products/${editingProduct.id}` // URL for updating
+      : `${URL}/products`; // URL for creating
 
     const method = editingProduct ? "PUT" : "POST"; // Method is PUT for edit, POST for new
 
@@ -114,7 +115,7 @@ export default function CollectionsManagement() {
     if (!confirmDelete) return;
 
     try {
-      await fetch(`http://localhost:3001/products/${id}`, {
+      await fetch(`${URL}/products/${id}`, {
         method: "DELETE",
       });
       setProducts(products.filter((p) => p.id !== id));
@@ -130,12 +131,19 @@ export default function CollectionsManagement() {
   const topSelling = products.reduce((prev, curr) => (curr.count > prev.count ? curr : prev), products[0] || {});
   const categories = ["All", ...new Set(products.map((p) => p.category))];
 
-  const filteredProducts = products.filter(
+  // Sort products with low stock first
+  const sortedProducts = [...products].sort((a, b) => {
+    if (a.count < 5 && b.count >= 5) return -1;
+    if (a.count >= 5 && b.count < 5) return 1;
+    return 0;
+  });
+
+  const filteredProducts = sortedProducts.filter(
     (p) =>
       (categoryFilter === "All" || p.category === categoryFilter) &&
       (p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.category.toLowerCase().includes(search.toLowerCase()))
-  );
+        p.category.toLowerCase().includes(search.toLowerCase())
+  ));
 
   if (!isAdmin) {
     return <div className="flex items-center justify-center min-h-screen">Access Denied</div>;
@@ -164,14 +172,51 @@ export default function CollectionsManagement() {
 
         {/* KPIs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {/* ... KPI Cards are unchanged ... */}
+          <div className="bg-white border border-[#E5D9C5] p-4 rounded shadow">
+            <h3 className="text-sm text-gray-500">Total Products</h3>
+            <p className="text-2xl font-bold">{totalProducts}</p>
+          </div>
+          <div className="bg-white border border-[#E5D9C5] p-4 rounded shadow">
+            <h3 className="text-sm text-gray-500">Inventory Value</h3>
+            <p className="text-2xl font-bold">₹{totalInventoryValue.toFixed(2)}</p>
+          </div>
+          <div className="bg-white border border-[#E5D9C5] p-4 rounded shadow">
+            <h3 className="text-sm text-gray-500">Low Stock Items</h3>
+            <p className="text-2xl font-bold text-red-500">{lowStockCount}</p>
+          </div>
+          <div className="bg-white border border-[#E5D9C5] p-4 rounded shadow">
+            <h3 className="text-sm text-gray-500">Top Selling</h3>
+            <p className="text-xl font-bold truncate">{topSelling.name || '-'}</p>
+          </div>
         </div>
 
         {/* Toolbar */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
-          {/* ... Toolbar content is unchanged ... */}
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <div className="relative flex-grow md:flex-grow-0 md:w-64">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="pl-10 pr-4 py-2 border rounded w-full"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <select
+              className="border rounded p-2"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
           <button
-            onClick={handleStartAdd} // Use the new handler to open the add form
+            onClick={handleStartAdd}
             className="flex items-center gap-1 bg-[#CC9966] text-white px-3 py-2 rounded shadow hover:bg-[#B38658]"
           >
             <PlusIcon className="w-4 h-4" /> Add Product
@@ -251,7 +296,7 @@ export default function CollectionsManagement() {
               </thead>
               <tbody>
                 {filteredProducts.map((p) => (
-                  <tr key={p.id} className="hover:bg-[#FAF9F6]">
+                  <tr key={p.id} className={`hover:bg-[#FAF9F6] ${p.count < 5 ? 'bg-red-50' : ''}`}>
                     <td className="px-4 py-2">
                       <img src={p.images[0]} alt={p.name} className="w-12 h-12 object-cover rounded" />
                     </td>
@@ -263,7 +308,7 @@ export default function CollectionsManagement() {
                       {/* --- ACTION BUTTONS --- */}
                       <div className="flex items-center gap-3">
                         <button
-                          onClick={() => handleStartEdit(p)} // Call edit handler
+                          onClick={() => handleStartEdit(p)}
                           className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
                         >
                           <PencilSquareIcon className="w-4 h-4" /> Edit

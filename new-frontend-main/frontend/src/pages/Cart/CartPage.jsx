@@ -13,7 +13,7 @@ export default function CartPage() {
     // Fetch cart from server
     const fetchCart = async () => {
         try {
-            const res = await axios.get(`http://localhost:3001/users/${user.id}`);
+            const res = await axios.get(`${URL}/users/${user.id}`);
             setCart(res.data.cart || []);
             setLoading(false);
         } catch (error) {
@@ -35,17 +35,17 @@ export default function CartPage() {
     const updatedCart = cart.filter((item) => item.id !== productId);
 
     // 3️⃣ Update the user's cart in backend
-    await axios.patch(`http://localhost:3001/users/${user.id}`, {
+    await axios.patch(`${URL}/users/${user.id}`, {
       cart: updatedCart,
     });
 
     // 4️⃣ Restore stock count in products list backend
-    const productRes = await axios.get(`http://localhost:3001/products/${productId}`);
+    const productRes = await axios.get(`${URL}/products/${productId}`);
     const productData = productRes.data;
 
     const restoredCount = productData.count + removedItem.quantity;
 
-    await axios.patch(`http://localhost:3001/products/${productId}`, {
+    await axios.patch(`${URL}/products/${productId}`, {
       count: restoredCount,
     });
 
@@ -78,7 +78,7 @@ export default function CartPage() {
             );
 
             // Update server
-            await axios.patch(`http://localhost:3001/users/${user.id}`, {
+            await axios.patch(`${URL}/users/${user.id}`, {
                 cart: updatedCart,
             });
 

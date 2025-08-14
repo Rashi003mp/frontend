@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { URL } from '../../api';
 
 const AdminRevenueContext = createContext();
 
@@ -24,7 +25,7 @@ export function AdminRevenueProvider({ children }) {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:3001/users');
+      const res = await fetch(`${URL}/users`);
       const users = await res.json();
       setOrders(users.flatMap(u => u.orders || []));
     } catch (err) {

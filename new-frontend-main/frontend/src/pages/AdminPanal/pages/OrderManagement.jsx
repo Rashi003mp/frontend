@@ -11,6 +11,7 @@ import {
 import AdminSidebar from "../components/AdminSidebar";
 import { useAuth } from "../../../context/AuthContext";
 import { useAdminRevenue } from "../Context/AdminContext";
+import { URL } from "../../api";
 
 export default function OrdersManagement() {
   const [orders, setOrders] = useState([]);
@@ -33,7 +34,7 @@ export default function OrdersManagement() {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:3001/users");
+      const res = await fetch(`${URL}/users`);
       const users = await res.json();
       let allOrders = [];
       users.forEach((u) => {
@@ -99,7 +100,7 @@ export default function OrdersManagement() {
 
   const updateOrderStatus = async (orderId, customerEmail, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:3001/users?email=${customerEmail}`);
+      const res = await fetch(`${URL}/users?email=${customerEmail}`);
       const users = await res.json();
       if (!users.length) return;
 
@@ -108,7 +109,7 @@ export default function OrdersManagement() {
         o.id === orderId ? { ...o, status: newStatus } : o
       );
 
-      await fetch(`http://localhost:3001/users/${userData.id}`, {
+      await fetch(`${URL}/users/${userData.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orders: updatedOrders }),

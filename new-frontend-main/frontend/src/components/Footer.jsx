@@ -77,12 +77,13 @@ const Footer = () => {
             <div>
               <h3 className="text-xs uppercase tracking-widest text-black dark:text-white mb-6 font-medium">Contact</h3>
               <ul className="space-y-3">
-                <li className="text-[#333] dark:text-[#e0e0e0] text-sm font-light tracking-wide">
-                  +1 800-JEANOGRAM
-                </li>
-                <li className="text-[#333] dark:text-[#e0e0e0] text-sm font-light tracking-wide">
+                <a href="tel:+917510737877" className="text-[#333] dark:text-[#e0e0e0] text-sm font-light tracking-wide">
+                  +91-751073 7877
+                </a>
+                <br />
+                <a href="mailto:muhammedrashidr222@gmail.com" className="text-[#333] dark:text-[#e0e0e0] text-sm font-light tracking-wide">
                   contact@jeanogram.com
-                </li>
+                </a>
                 <li className="flex space-x-4 pt-2">
                   <a href="#" className="text-[#333] dark:text-[#e0e0e0] hover:text-black dark:hover:text-white transition-colors duration-300">
                     <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

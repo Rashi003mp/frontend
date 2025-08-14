@@ -4,6 +4,7 @@ import {
   ShoppingBag, Heart, Edit, Lock, CreditCard
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { URL } from '../api';
 
 export default function Profile() {
   const { user, refreshUser } = useAuth();
@@ -71,7 +72,7 @@ export default function Profile() {
     }
     
     try {
-      const response = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const response = await fetch(`${URL}/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

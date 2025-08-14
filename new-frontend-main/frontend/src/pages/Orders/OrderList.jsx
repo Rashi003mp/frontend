@@ -38,10 +38,10 @@ const OrderList = () => {
       // Restore stock counts for each item in the cancelled order
       for (const item of cancelledOrder.cart) {
         try {
-          const productRes = await fetch(`http://localhost:3001/products/${item.id}`);
+          const productRes = await fetch(`${URL}/products/${item.id}`);
           const productData = await productRes.json();
           const updatedCount = (productData.count || 0) + (item.quantity || 0);
-          await fetch(`http://localhost:3001/products/${item.id}`, {
+          await fetch(`${URL}/products/${item.id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ count: updatedCount }),
@@ -55,7 +55,7 @@ const OrderList = () => {
       const updatedOrders = user.orders.filter(order => order.id !== orderId);
 
       // Update the user object on the backend
-      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const res = await fetch(`${URL}/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

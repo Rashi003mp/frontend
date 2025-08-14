@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import { URL } from '../api';
 
 export default function ProductDetails() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function ProductDetails() {
 
   // Fetch product
   useEffect(() => {
-    axios.get(`http://localhost:3001/products/${id}`)
+    axios.get(`${URL}/products/${id}`)
       .then(res => setProduct(res.data))
       .catch(err => console.error('Error fetching product:', err));
   }, [id]);
@@ -24,7 +25,7 @@ export default function ProductDetails() {
   // Check if product already exists in cart
   useEffect(() => {
     if (user && product) {
-      axios.get(`http://localhost:3001/users/${user.id}`)
+      axios.get(`${URL}/users/${user.id}`)
         .then(res => {
           const cart = res.data.cart || [];
           const alreadyInCart = cart.some(item => item.id === product.id);
@@ -49,10 +50,10 @@ export default function ProductDetails() {
 
   try {
     // Fetch user and product from backend for latest data
-    const userRes = await axios.get(`http://localhost:3001/users/${user.id}`);
+    const userRes = await axios.get(`${URL}/users/${user.id}`);
     const userData = userRes.data;
 
-    const productRes = await axios.get(`http://localhost:3001/products/${product.id}`);
+    const productRes = await axios.get(`${URL}/products/${product.id}`);
     const productData = productRes.data;
 
     // Check remaining stock
@@ -74,7 +75,7 @@ export default function ProductDetails() {
         )
       : [...(userData.cart || []), { ...productData, quantity }];
 
-    await axios.patch(`http://localhost:3001/users/${user.id}`, { cart: updatedCart });
+    await axios.patch(`${URL}/users/${user.id}`, { cart: updatedCart });
     const updatedUser = { ...userData, cart: updatedCart };
     localStorage.setItem('user', JSON.stringify(updatedUser));
     setIsInCart(true);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { URL } from '../api';
 
 const PaymentForm = ({ currentUser, cart, clearCart }) => {
   const navigate = useNavigate();
@@ -119,7 +120,7 @@ const PaymentForm = ({ currentUser, cart, clearCart }) => {
     try {
       const updatedOrders = [...(currentUser.orders || []), orderData];
 
-      const userResponse = await fetch(`http://localhost:3001/users/${currentUser.id}`, {
+      const userResponse = await fetch(`${URL}/users/${currentUser.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,7 +134,7 @@ const PaymentForm = ({ currentUser, cart, clearCart }) => {
       await Promise.all(
         cart.map(item => {
           const newCount = item.count - item.quantity;
-          return fetch(`http://localhost:3001/products/${item.id}`, {
+          return fetch(`${URL}/products/${item.id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ count: newCount }),

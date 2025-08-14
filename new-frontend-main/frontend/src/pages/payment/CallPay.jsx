@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PaymentForm from './PaymentForm';
 import { useAuth } from '../../context/AuthContext';
+import { URL } from '../api';
 
 function CallPay() {
   const { user: authUser } = useAuth();
@@ -12,7 +13,7 @@ function CallPay() {
     if (!authUser) return;
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:3001/users/${authUser.id}`);
+      const res = await fetch(`${URL}/users/${authUser.id}`);
       if (!res.ok) throw new Error('Failed to fetch user data');
       const freshUser = await res.json();
       setUser(freshUser);
@@ -31,7 +32,7 @@ function CallPay() {
   const clearCart = async () => {
     if (!user) return;
     try {
-      const res = await fetch(`http://localhost:3001/users/${user.id}`, {
+      const res = await fetch(`${URL}/users/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cart: [] })

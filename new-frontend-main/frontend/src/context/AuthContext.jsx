@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { URL } from '../pages/api';
 
 const AuthContext = createContext();
 
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     if (!user?.id) return;
 
     try {
-      const res = await fetch(`http://localhost:3001/users/${user.id}`);
+      const res = await fetch(`${URL}/users/${user.id}`);
       if (res.ok) {
         const updatedUser = await res.json();
         setUser(updatedUser);
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await fetch(`http://localhost:3001/users?email=${email}`);
+      const res = await fetch(`${URL}/users?email=${email}`);
       const users = await res.json();
 
       if (users.length > 0 && users[0].password === password) {
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const checkEmail = await fetch(`http://localhost:3001/users?email=${userData.email}`);
+      const checkEmail = await fetch(`${URL}/users?email=${userData.email}`);
       const result = await checkEmail.json();
 
       if (result.length > 0) {
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         created_at: new Date().toISOString(),
       };
 
-      const response = await fetch('http://localhost:3001/users', {
+      const response = await fetch(`${URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(completeUserData),

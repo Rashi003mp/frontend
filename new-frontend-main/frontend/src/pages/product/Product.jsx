@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import SubNav from '../../components/Subnav';
 import Footer from '../../components/Footer';
 import { WishlistContext } from '../../context/WishlistContext';
+import { URL } from '../api';
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -21,7 +22,7 @@ export default function Products() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const productsRes = await axios.get('http://localhost:3001/products');
+        const productsRes = await axios.get(`${URL}/products`);
         const productList = productsRes.data;
 
         setProducts(productList);
@@ -68,7 +69,7 @@ export default function Products() {
       : [...wishlist, product];
 
     try {
-      await axios.patch(`http://localhost:3001/users/${user.id}`, {
+      await axios.patch(`${URL}/users/${user.id}`, {
         wishlist: updatedWishlist
       });
 

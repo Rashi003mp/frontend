@@ -6,6 +6,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 import { WishlistContext } from '../../context/WishlistContext';
+import { URL } from '../api';
 
 function WishlistPage() {
   const [loading, setLoading] = useState(true);
@@ -19,7 +20,7 @@ function WishlistPage() {
   const updateWishlist = async (updatedWishlist) => {
     try {
       if (user?.id) {
-        await axios.patch(`http://localhost:3001/users/${user.id}`, {
+        await axios.patch(`${URL}/users/${user.id}`, {
           wishlist: updatedWishlist
         });
         // Also update user in context so Products.jsx sees the change
@@ -40,7 +41,7 @@ function WishlistPage() {
       try {
         setLoading(true);
         if (user?.id) {
-          const response = await axios.get(`http://localhost:3001/users/${user.id}`);
+          const response = await axios.get(`${URL}/users/${user.id}`);
           const userWishlist = response.data.wishlist || [];
           setWishlist(userWishlist); // ✅ from context
         }
@@ -78,7 +79,7 @@ function WishlistPage() {
 
     try {
       if (user?.id) {
-        await axios.patch(`http://localhost:3001/users/${user.id}`, { wishlist: [] });
+        await axios.patch(`${URL}/users/${user.id}`, { wishlist: [] });
         setUser((prev) => ({ ...prev, wishlist: [] }));
       }
       setWishlist([]); // ✅ updates everywhere
